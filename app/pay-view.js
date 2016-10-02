@@ -5,6 +5,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import TicketView from './ticket-view';
 import {
   AppRegistry,
   StyleSheet,
@@ -20,6 +21,7 @@ class PayView extends Component {
   static propTypes = {
     paymentFor: PropTypes.string.isRequired
   }
+
   constructor() {
     super();
     this.state = {
@@ -29,18 +31,16 @@ class PayView extends Component {
 
   _onForward(rowData) {
     this.props.navigator.push({
-      title: rowData
+      title: rowData,
+      component: TicketView
     });
   }
 
   _payWithCard() {
     this.setState({ processingPayment: true });
-    // setTimeout(() => {
-    //   this.setState({
-    //     processingPayment: !this.state.processingPayment
-    //   });
-    //   this._onForward('TicketView');
-    // }, 2000);
+    setTimeout(() => {
+      this._onForward('Bekreftelse');
+    }, 1000);
   }
 
   render() {
@@ -66,7 +66,7 @@ class PayView extends Component {
             <TouchableOpacity onPress={this._payWithCard.bind(this)}>
               <Text style={styles.payButton}>Betal med kort</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this._payWithCard.bind(this)}>
               <Text style={[styles.payButton, styles.payButtonVipps]}>Betal med Vipps</Text>
             </TouchableOpacity>
           </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginLeft: 16,
     marginRight: 16,
-    padding:18,
+    padding: 18,
     color: '#FFFFFF',
     fontSize: 20,
     backgroundColor: '#ffc100'

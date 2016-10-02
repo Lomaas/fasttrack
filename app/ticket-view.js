@@ -12,13 +12,13 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  ScrollView,
   ListView,
   View
 } from 'react-native';
 
 class TicketView extends Component {
-  static propTypes = {
-  }
+
   constructor() {
     super();
   }
@@ -31,13 +31,14 @@ class TicketView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.header}>Payment for this.props.paymentFor</Text>
+      <ScrollView style={styles.container}>
+        <Text style={styles.header}>Din billett</Text>
+        <Text style={styles.note}>Vis billetten til vakten i døren.</Text>
         <Image
           style={styles.qrcode}
           resizeMode={'cover'}
           source={qrcode}/>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -47,22 +48,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
-  rowText: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
   header: {
-    marginTop: 100,
+    marginTop: 50,
     fontSize: 22,
     textAlign: 'center',
-    margin: 10,
+    marginBottom: 5,
+  },
+  note: {
+    fontSize: 17,
+    fontWeight: '200',
+    marginBottom: 25,
+    alignSelf: 'center',
+    marginRight: 16,
+    marginLeft: 16
   },
   qrcode: {
-    margin:0,
-    flex: 1,
     height: 240,
+    width: 300,
+    alignSelf: 'center'
   }
 });
 
-export default Ticket;
+export default TicketView;
