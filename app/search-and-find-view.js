@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image,
   ListView,
   TextInput,
   View
@@ -18,46 +19,44 @@ import {
 
 class SearchAndFindView extends Component {
 
-  static propTypes = {
-    navigator: PropTypes.object.isRequired
-  }
-
   constructor() {
     super();
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       searchText: '',
       dataSource: ds.cloneWithRows([
-        'Sirkus',
-        'Nox',
-        'Skagum'
+        { name: 'Sirkus', location: '50m', image: require('./static/baroque.png') },
+        { name: 'Nox', location: '80m', image: require('./static/nox.png') },
+        { name: 'Skagum', location: '200m', image: require('./static/skagum.png') }
       ]),
     };
   }
 
   _onForward(rowData) {
     this.props.navigator.push({
-      title: rowData,
-      component: PayView
+      title: rowData.name,
+      component: PayView,
+      passProps: rowData,
     });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={{height: 40, placeholder:'ff', marginTop: 72, color: '#000000'}}
-          onChangeText={(text) => this.setState({searchText: text})}
-          value={this.state.searchText}
-        />
-        <Text style={styles.header}>Utested i nærheten</Text>
         <ListView
-          style={{flex: 1}}
+          style={{flex: 1, marginTop: 64, backgroundColor: '#000000'}}
           dataSource={this.state.dataSource}
           renderRow={ (rowData) => {
             return (
               <TouchableOpacity onPress={this._onForward.bind(this, rowData)}>
-                <Text style={styles.row}> {rowData} </Text>
+                <View style={styles.row}>
+                <Image
+                  resizeMode={'cover'}
+                  style={styles.imageRow}
+                  source={rowData.image} />
+                  <Text style={styles.nameRow}>{rowData.name}</Text>
+                  <Text style={styles.locationRow}>{rowData.location}</Text>
+                </View>
               </TouchableOpacity>
             )
           }}
@@ -66,18 +65,6 @@ class SearchAndFindView extends Component {
     );
   }
 }
-
-const renderRow = (rowData) => {
-  const postMessage = () => {
-    console.log("Didpress render rowww")
-    this._onForward();
-  }
-  return (
-    <TouchableOpacity style={{flex: 1}} onPress={postMessage}>
-      <Text style={styles.row}> {rowData} </Text>
-    </TouchableOpacity>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,20 +77,32 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   row: {
-    marginTop: 20,
     borderRadius: 3,
-    marginLeft: 16,
-    marginRight: 16,
-    padding:18,
+  },
+  nameRow: {
     color: '#FFFFFF',
-    fontSize: 20,
-    backgroundColor: '#ff0000'
+    fontSize: 24,
+    position: 'absolute',
+    bottom: 17,
+    left: 16,
+    backgroundColor:'rgba(52,52,52,0)',
+  },
+  locationRow: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    position: 'absolute',
+    bottom: 1,
+    left: 16,
+    backgroundColor:'rgba(52,52,52,0)',
+  },
+  imageRow: {
+    height: 240
   },
   header: {
-    marginTop: 10,
     fontSize: 22,
     textAlign: 'left',
-    margin: 16,
+    marginLeft: 16,
+    marginRight: 16
   },
 });
 

@@ -18,10 +18,7 @@ import {
 } from 'react-native';
 
 class PayView extends Component {
-  static propTypes = {
-    paymentFor: PropTypes.string.isRequired
-  }
-
+  
   constructor() {
     super();
     this.state = {
