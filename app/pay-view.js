@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Text,
   ActivityIndicator,
+  Modal,
   ScrollView,
   TouchableOpacity,
   ListView,
@@ -18,30 +19,41 @@ import {
 } from 'react-native';
 
 class PayView extends Component {
-  
+
   constructor() {
     super();
     this.state = {
-      processingPayment: false
+      processingPayment: false,
+      modalVisible: false
     }
   }
 
   _onForward(rowData) {
     this.props.navigator.push({
       title: rowData,
-      component: TicketView
+      component: TicketView,
+      passProps: { name: this.props.name,  },
     });
+  }
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
+  _onRequestCloseTickeyView() {
+    this.setModalVisible(false);
   }
 
   _payWithCard() {
     this.setState({ processingPayment: true });
     setTimeout(() => {
-      this._onForward('Bekreftelse');
+      // this._onForward('Bekreftelse');
+      this.setModalVisible();
     }, 1000);
   }
 
   render() {
-    console.log('processingPayment');
+    console.log('processingPayment', this.props);
     const scrollViewStyles = [styles.container];
     if (this.state.processingPayment) {
       scrollViewStyles.push({ backgroundColor: "#ff00ff00" });
@@ -49,22 +61,22 @@ class PayView extends Component {
 
     return (
       <ScrollView style={scrollViewStyles}>
-        <Text style={styles.header}>Payment for Sirkus </Text>
+        <Text style={styles.header}>Payment for { this.props.name }</Text>
         <View style={styles.row}>
-          <Text style={[styles.rowTextLeftLabel, styles.rowTextKursiv]}>Product</Text>
-          <Text style={[  styles.rowTextRightLabel, styles.rowTextKursiv]}>Fasttrack for Sirkus</Text>
+          <Text style={[styles.rowTextLeftLabel, styles.rowTextKursiv]}>Fasttrack for { this.props.name }</Text>
+          <Text style={[  styles.rowTextRightLabel, styles.rowTextKursiv]}>2 x 250,-</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.rowTextLeftLabel}>Total</Text>
-          <Text style={styles.rowTextRightLabel}>kr 250,-</Text>
+          <Text style={styles.rowTextRightLabel}>kr 500,-</Text>
         </View>
         { !this.state.processingPayment &&
           <View>
             <TouchableOpacity onPress={this._payWithCard.bind(this)}>
-              <Text style={styles.payButton}>Betal med kort</Text>
+              <Text style={[styles.payButton, styles.payButtonVipps]}>Pay</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this._payWithCard.bind(this)}>
-              <Text style={[styles.payButton, styles.payButtonVipps]}>Betal med Vipps</Text>
+            <TouchableOpacity>
+              <Text style={styles.note}>Change payment method? Click here</Text>
             </TouchableOpacity>
           </View>
         }
@@ -74,6 +86,15 @@ class PayView extends Component {
             style={[styles.centering, { height: 80 }]}
             size="large"
             />
+        }
+        {
+          <Modal
+             animationType={"slide"}
+             transparent={false}
+             visible={this.state.modalVisible}
+             onRequestClose={this._onRequestCloseTickeyView.bind(this)}>
+             <TicketView closeView={this.setModalVisible.bind(this, false)}/>
+          </Modal>
         }
       </ScrollView>
     );
@@ -93,6 +114,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
     padding: 18,
     color: '#FFFFFF',
+    textAlign: 'center',
     fontSize: 20,
     backgroundColor: '#ffc100'
   },
@@ -118,13 +140,21 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   rowTextKursiv: {
-    fontWeight: '300'
+    fontWeight: '200'
   },
   header: {
     marginTop: 30,
     fontSize: 22,
     textAlign: 'center',
     margin: 10,
+  },
+  note: {
+    fontSize: 15,
+    fontWeight: '200',
+    marginTop: 35,
+    alignSelf: 'center',
+    marginRight: 16,
+    marginLeft: 16
   },
 });
 

@@ -6,6 +6,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import qrcode from './static/qrcode.png';
+import closeButton from './static/close-button.png';
+import PayView from './pay-view';
 import {
   AppRegistry,
   StyleSheet,
@@ -29,16 +31,23 @@ class TicketView extends Component {
     });
   }
 
+  componentDidMount() { }
+
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <Text style={styles.header}>Din billett</Text>
-        <Text style={styles.note}>Vis billetten til vakten i døren.</Text>
-        <Image
-          style={styles.qrcode}
-          resizeMode={'cover'}
-          source={qrcode}/>
-      </ScrollView>
+      <View style={styles.container}>
+        <ScrollView style={styles.container}>
+          <Text style={styles.header}>Your ticket</Text>
+          <Text style={styles.note}>Show the ticket to the guard at the entrance.</Text>
+          <Image
+            style={styles.qrcode}
+            resizeMode={'cover'}
+            source={qrcode}/>
+        </ScrollView>
+        <TouchableOpacity onPress={this.props.closeView}>
+          <Text style={styles.closeButton}>Close</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
@@ -48,8 +57,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
+  closeButton: {
+    marginBottom: 35,
+    fontSize: 22,
+    fontWeight: '300',
+    textAlign: 'center',
+  },
   header: {
-    marginTop: 50,
+    marginTop: 72,
     fontSize: 22,
     textAlign: 'center',
     marginBottom: 5,

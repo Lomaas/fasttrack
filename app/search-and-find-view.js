@@ -36,7 +36,7 @@ class SearchAndFindView extends Component {
     this.props.navigator.push({
       title: rowData.name,
       component: PayView,
-      passProps: rowData,
+      passProps: { ...rowData },
     });
   }
 
@@ -97,12 +97,6 @@ const styles = StyleSheet.create({
   },
   imageRow: {
     height: 240
-  },
-  header: {
-    fontSize: 22,
-    textAlign: 'left',
-    marginLeft: 16,
-    marginRight: 16
   },
 });
 
