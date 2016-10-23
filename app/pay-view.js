@@ -6,6 +6,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import TicketView from './ticket-view';
+import CardInput from './card-input';
 import {
   AppRegistry,
   StyleSheet,
@@ -45,11 +46,16 @@ class PayView extends Component {
   }
 
   _payWithCard() {
-    this.setState({ processingPayment: true });
-    setTimeout(() => {
+    this.props.navigator.push({
+      title: 'Oppgi kortinformasjon',
+      component: CardInput
+    });
+
+    //this.setState({ processingPayment: true });
+    //setTimeout(() => {
       // this._onForward('Bekreftelse');
-      this.setModalVisible();
-    }, 1000);
+      //this.setModalVisible();
+    //}, 1000);
   }
 
   render() {
